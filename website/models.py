@@ -68,7 +68,8 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=300)
     slug = models.SlugField(unique=True, max_length=300)
     author = models.CharField(max_length=200, default="Suzstar Counseling Team")
-    featured_image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    #featured_image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    featured_image = models.FileField(upload_to='blog/', blank=True, null=True)
     excerpt = models.TextField(max_length=500, help_text="Brief summary for blog listings")
     content = RichTextField()
     category = models.CharField(max_length=100, choices=[
@@ -242,7 +243,8 @@ class Event(models.Model):
         ('webinar', 'Webinar'),
     ])
     description = RichTextField()
-    featured_image = models.ImageField(upload_to='events/', blank=True, null=True)
+    #featured_image = models.ImageField(upload_to='events/', blank=True, null=True)
+    featured_image = models.FileField(upload_to='events/', blank=True, null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     location = models.CharField(max_length=500)
@@ -292,8 +294,9 @@ class SiteSetting(models.Model):
     """Model for dynamic site settings"""
     site_name = models.CharField(max_length=200, default="Suzstar Counseling")
     tagline = models.CharField(max_length=500, blank=True)
-    logo = models.ImageField(upload_to='site/', blank=True, null=True)
-    favicon = models.ImageField(upload_to='site/', blank=True, null=True)
+    #logo = models.ImageField(upload_to='site/', blank=True, null=True)
+    logo = models.FileField(upload_to='site/', blank=True, null=True)
+    favicon = models.FileField(upload_to='site/', blank=True, null=True)
     primary_color = models.CharField(max_length=20, default="#4A90E2")
     secondary_color = models.CharField(max_length=20, default="#F5A623")
     

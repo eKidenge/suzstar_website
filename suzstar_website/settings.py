@@ -42,13 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ckeditor',
-    'website',
+    #'website',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ADD THIS LINE
+    #'whitenoise.middleware.WhiteNoiseMiddleware',  # ADD THIS LINE
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Services - Suzstar Counseling{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-primary text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-4 fw-bold mb-3">Our Services</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'website:home' %}" class="text-white">Home</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Services</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Overview -->
+<section class="services-overview py-5">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Comprehensive Mental Health Support</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 800px;">
+                We offer a range of evidence-based services tailored to meet you where you are. 
+                Whether you're seeking individual support or community connection, we're here for you.
+            </p>
+        </div>
+        
+        <!-- Individual Counseling -->
+        <div id="individual" class="service-category mb-5">
+            <h3 class="fw-bold mb-4 pb-2 border-bottom">Individual Counseling</h3>
+            <div class="row g-4">
+                {% for service in individual_services %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-{{ service.icon_name|default:'user' }} fa-3x text-primary"></i>
+                        </div>
+                        <h4>{{ service.name }}</h4>
+                        <p class="text-muted">{{ service.short_description }}</p>
+                        <div class="service-meta mb-3">
+                            {% if service.duration %}
+                                <span class="badge bg-secondary me-2"><i class="far fa-clock me-1"></i>{{ service.duration }}</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'website:service_detail' service.id %}" class="btn btn-outline-primary btn-sm">
+                            Learn More <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Individual counseling services information coming soon. Please contact us for immediate support.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Group Therapy -->
+        <div id="group" class="service-category mb-5">
+            <h3 class="fw-bold mb-4 pb-2 border-bottom">Group Therapy & Support Circles</h3>
+            <div class="row g-4">
+                {% for service in group_services %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-{{ service.icon_name|default:'users' }} fa-3x text-primary"></i>
+                        </div>
+                        <h4>{{ service.name }}</h4>
+                        <p class="text-muted">{{ service.short_description }}</p>
+                        <a href="{% url 'website:service_detail' service.id %}" class="btn btn-outline-primary btn-sm">
+                            Learn More <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <h4>Support Circles</h4>
+                        <p>Safe spaces for shared experiences, emotional connection, and collective healing.</p>
+                        <a href="{% url 'website:contact' %}" class="btn btn-outline-primary btn-sm">Inquire</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <h4>Themed Group Therapy</h4>
+                        <p>Specialized groups for anxiety, grief, relationships, and more.</p>
+                        <a href="{% url 'website:contact' %}" class="btn btn-outline-primary btn-sm">Inquire</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Psychoeducation Workshops -->
+        <div id="workshops" class="service-category mb-5">
+            <h3 class="fw-bold mb-4 pb-2 border-bottom">Psychoeducation Workshops</h3>
+            <div class="row g-4">
+                {% for service in workshop_services %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-{{ service.icon_name|default:'chalkboard-teacher' }} fa-3x text-primary"></i>
+                        </div>
+                        <h4>{{ service.name }}</h4>
+                        <p class="text-muted">{{ service.short_description }}</p>
+                        <a href="{% url 'website:service_detail' service.id %}" class="btn btn-outline-primary btn-sm">
+                            Learn More <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <h4>Stress Management</h4>
+                        <p>Learn practical techniques to manage stress and prevent burnout.</p>
+                        <a href="{% url 'website:events' %}" class="btn btn-outline-primary btn-sm">View Schedule</a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <h4>Emotional Regulation</h4>
+                        <p>Develop skills to understand and manage your emotions effectively.</p>
+                        <a href="{% url 'website:events' %}" class="btn btn-outline-primary btn-sm">View Schedule</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Community Outreach -->
+        <div id="outreach" class="service-category mb-5">
+            <h3 class="fw-bold mb-4 pb-2 border-bottom">Community Outreach & Awareness</h3>
+            <div class="row g-4">
+                {% for service in outreach_services %}
+                <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <div class="service-icon mb-3">
+                            <i class="fas fa-{{ service.icon_name|default:'globe-africa' }} fa-3x text-primary"></i>
+                        </div>
+                        <h4>{{ service.name }}</h4>
+                        <p class="text-muted">{{ service.short_description }}</p>
+                        <a href="{% url 'website:service_detail' service.id %}" class="btn btn-outline-primary btn-sm">
+                            Learn More <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-md-6">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <h4>Mental Health Awareness Campaigns</h4>
+                        <p>Events and initiatives that reduce stigma and promote mental wellbeing in the community.</p>
+                        <a href="{% url 'website:contact' %}" class="btn btn-outline-primary btn-sm">Partner With Us</a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="service-detail-card h-100 bg-light p-4 rounded-3">
+                        <h4>School & Workplace Programs</h4>
+                        <p>Mental health education and support programs for schools and organizations.</p>
+                        <a href="{% url 'website:contact' %}" class="btn btn-outline-primary btn-sm">Inquire</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Approaches & Techniques -->
+<section class="approaches-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Our Therapeutic Approaches</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                We use clinically supported, respectful, and client-centered methods tailored to your unique needs
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            {% for approach in approaches %}
+            <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:'100' }}">
+                <div class="approach-card h-100 bg-white p-4 rounded-3 shadow-sm">
+                    <div class="approach-icon mb-3">
+                        <i class="fas fa-check-circle text-primary fa-2x"></i>
+                    </div>
+                    <h5>{{ approach.name }}</h5>
+                    <p class="text-muted mb-0">{{ approach.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="note-box bg-white p-4 rounded-3 mt-5" data-aos="fade-up">
+            <div class="d-flex">
+                <i class="fas fa-info-circle text-primary fa-2x me-3"></i>
+                <div>
+                    <p class="mb-0"><strong>Note:</strong> Specific approaches vary based on client needs. Your counselor will work with you to determine the most effective approach for your situation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-choose-detailed py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                <img src="{% static 'images/why-choose.jpg' %}" alt="Why Choose Suzstar" class="img-fluid rounded-3 shadow">
+            </div>
+            <div class="col-lg-6" data-aos="fade-left">
+                <h2 class="display-5 fw-bold mb-4">Why Choose Suzstar Counseling</h2>
+                
+                <ul class="list-unstyled">
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-check-circle text-primary fa-2x me-3"></i>
+                        <div>
+                            <h5>Safe, non-judgmental space</h5>
+                            <p class="text-muted">A welcoming environment where you can be yourself without fear of judgment.</p>
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-check-circle text-primary fa-2x me-3"></i>
+                        <div>
+                            <h5>Licensed and trained counselors</h5>
+                            <p class="text-muted">Our team consists of qualified professionals with diverse specializations.</p>
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-check-circle text-primary fa-2x me-3"></i>
+                        <div>
+                            <h5>Confidential support</h5>
+                            <p class="text-muted">Your privacy is protected by professional ethics and legal standards.</p>
+                        </div>
+                    </li>
+                    <li class="mb-3 d-flex">
+                        <i class="fas fa-check-circle text-primary fa-2x me-3"></i>
+                        <div>
+                            <h5>Inclusive, culturally sensitive care</h5>
+                            <p class="text-muted">We respect and honor diverse backgrounds, identities, and experiences.</p>
+                        </div>
+                    </li>
+                    <li class="d-flex">
+                        <i class="fas fa-check-circle text-primary fa-2x me-3"></i>
+                        <div>
+                            <h5>Focus on strength, recovery, and resilience</h5>
+                            <p class="text-muted mb-0">We believe in your capacity to heal and grow.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Support Options -->
+<section class="support-options py-5 bg-light">
+    <div class="container">
+        <h2 class="display-5 fw-bold text-center mb-5">Flexible Support Options</h2>
+        
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="option-card bg-white p-4 rounded-3 shadow-sm text-center h-100">
+                    <div class="option-icon bg-primary bg-opacity-10 p-3 rounded-circle d-inline-block mb-4">
+                        <i class="fas fa-laptop-house text-primary fa-3x"></i>
+                    </div>
+                    <h4>Online Counseling</h4>
+                    <p class="text-muted">Video or voice sessions for convenience and privacy. Access support from anywhere.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Secure video platform</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Flexible scheduling</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Same quality of care</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="option-card bg-white p-4 rounded-3 shadow-sm text-center h-100">
+                    <div class="option-icon bg-primary bg-opacity-10 p-3 rounded-circle d-inline-block mb-4">
+                        <i class="fas fa-building text-primary fa-3x"></i>
+                    </div>
+                    <h4>In-Person Sessions</h4>
+                    <p class="text-muted">Face-to-face counseling at our comfortable, private space in Mombasa.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Private counseling rooms</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Central location</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Warm, welcoming environment</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="option-card bg-white p-4 rounded-3 shadow-sm text-center h-100">
+                    <div class="option-icon bg-primary bg-opacity-10 p-3 rounded-circle d-inline-block mb-4">
+                        <i class="fas fa-users text-primary fa-3x"></i>
+                    </div>
+                    <h4>Walk-in Support / Group Events</h4>
+                    <p class="text-muted">Check our events calendar for upcoming circles and workshops.</p>
+                    <ul class="list-unstyled text-start mt-3">
+                        <li><i class="fas fa-check text-success me-2"></i>No appointment needed</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Community connection</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Affordable options</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="{% url 'website:book_appointment' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-check me-2"></i>Book Your Session
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Teaser -->
+<section class="faq-teaser py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center" data-aos="fade-up">
+                <h2 class="display-5 fw-bold mb-4">Have Questions?</h2>
+                <p class="lead mb-4">Find answers to common questions about our services, appointments, and what to expect.</p>
+                <a href="{% url 'website:faq' %}" class="btn btn-outline-primary btn-lg">
+                    View Frequently Asked Questions <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

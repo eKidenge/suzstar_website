@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suzstar Dashboard | Mental Health Hub Management</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- FullCalendar -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
+    
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    
+    <!-- Toastr -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    
+    <!-- Quill Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --primary-dark: #357ABD;
+            --primary-light: #6BA5E8;
+            --secondary: #F5A623;
+            --secondary-dark: #E09612;
+            --success: #28A745;
+            --danger: #DC3545;
+            --warning: #FFC107;
+            --info: #17A2B8;
+            --dark: #2C3E50;
+            --gray: #6C757D;
+            --light: #F8F9FA;
+            --white: #FFFFFF;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F7FC;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Wrapper */
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, var(--dark) 0%, #1E2B38 100%);
+            color: var(--white);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .sidebar-header h3 span {
+            color: var(--secondary);
+        }
+
+        .sidebar-header p {
+            margin: 5px 0 0;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-section {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .menu-section-title {
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            margin: 2px 0;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+            border-left-color: var(--secondary);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .menu-item .badge {
+            margin-left: auto;
+            background: var(--secondary);
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .menu-item .arrow {
+            margin-left: auto;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item[aria-expanded="true"] .arrow {
+            transform: rotate(90deg);
+        }
+
+        .sub-menu {
+            padding-left: 53px;
+            background: rgba(0,0,0,0.2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .sub-menu.show {
+            max-height: 300px;
+        }
+
+        .sub-menu .menu-item {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            height: var(--header-height);
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            margin-right: 20px;
+            display: none;
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-search {
+            position: relative;
+        }
+
+        .header-search input {
+            width: 300px;
+            padding: 8px 15px 8px 40px;
+            border: 1px solid #E0E0E0;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.1);
+        }
+
+        .header-search i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .header-notifications {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .header-notifications i {
+            font-size: 1.3rem;
+            color: var(--gray);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 50px;
+            transition: background 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: var(--light);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-info {
+            line-height: 1.3;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .stat-icon.primary {
+            background: rgba(74,144,226,0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.success {
+            background: rgba(40,167,69,0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.warning {
+            background: rgba(255,193,7,0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.danger {
+            background: rgba(220,53,69,0.1);
+            color: var(--danger);
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h5 {
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .chart-actions select {
+            padding: 5px 10px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Tables */
+        .table-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .table-header h5 {
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .table-header .btn-add {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .table-header .btn-add:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74,144,226,0.3);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead th {
+            padding: 12px;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 2px solid #E0E0E0;
+            text-align: left;
+        }
+
+        .data-table tbody td {
+            padding: 12px;
+            border-bottom: 1px solid #E0E0E0;
+            color: var(--dark);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--light);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-badge.confirmed {
+            background: rgba(40,167,69,0.1);
+            color: var(--success);
+        }
+
+        .status-badge.pending {
+            background: rgba(255,193,7,0.1);
+            color: var(--warning);
+        }
+
+        .status-badge.cancelled {
+            background: rgba(220,53,69,0.1);
+            color: var(--danger);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-icon.edit {
+            background: var(--primary);
+        }
+
+        .btn-icon.view {
+            background: var(--info);
+        }
+
+        .btn-icon.delete {
+            background: var(--danger);
+        }
+
+        /* Calendar */
+        .calendar-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        #calendar {
+            height: 600px;
+        }
+
+        /* Analytics Section */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .analytics-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .analytics-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .analytics-trend {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quick-action-btn {
+            background: var(--white);
+            border: none;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(74,144,226,0.2);
+        }
+
+        .quick-action-btn i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .quick-action-btn span {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border-radius: 15px 15px 0 0;
+            padding: 20px 25px;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid #E0E0E0;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            padding: 10px 15px;
+            border: 1px solid #E0E0E0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74,144,226,0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .header-search input {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-search {
+                display: none;
+            }
+            
+            .user-info {
+                display: none;
+            }
+            
+            .dashboard-content {
+                padding: 20px;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Customization */
+        #toast-container {
+            z-index: 99999;
+        }
+
+        .toast-success {
+            background-color: var(--success) !important;
+        }
+
+        .toast-error {
+            background-color: var(--danger) !important;
+        }
+
+        .toast-warning {
+            background-color: var(--warning) !important;
+        }
+
+        .toast-info {
+            background-color: var(--primary) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Suzstar<span>Hub</span></h3>
+                <p>Mental Health Management</p>
+            </div>
+            
+            <div class="sidebar-menu">
+                <!-- Main Menu -->
+                <div class="menu-section">
+                    <div class="menu-section-title">Main</div>
+                    <a href="#dashboard" class="menu-item active" data-section="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#analytics" class="menu-item" data-section="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                        <span class="badge">New</span>
+                    </a>
+                    <a href="#calendar" class="menu-item" data-section="calendar">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Calendar</span>
+                    </a>
+                </div>
+                
+                <!-- Content Management -->
+                <div class="menu-section">
+                    <div class="menu-section-title">Content</div>
+                    <a href="#blog" class="menu-item" data-section="blog">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog Posts</span>
+                    </a>
+                    <a href="#services" class="menu-item" data-section="services">
+                        <i class="fas fa-hands-helping"></i>
+                        <span>Services</span>
+                    </a>
+                    <a href="#counselors" class="menu-item" data-section="counselors">
+                        <i class="fas fa-user-md"></i>
+                        <span>Counselors</span>
+                    </a>
+                    <a href="#events" class="menu-item" data-section="events">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>Events</span>
+                    </a>
+                    <a href="#resources" class="menu-item" data-section="resources">
+                        <i class="fas fa-book-open"></i>
+                        <span>Resources</span>
+                    </a>
+                    <a href="#testimonials" class="menu-item" data-section="testimonials">
+                        <i class="fas fa-star"></i>
+                        <span>Testimonials</span>
+                    </a>
+                    <a href="#faq" class="menu-item" data-section="faq">
+                        <i class="fas fa-question-circle"></i>
+                        <span>FAQ</span>
+                    </a>
+                </div>
+                
+                <!-- Appointments -->
+                <div class="menu-section">
+                    <div class="menu-section-title">Appointments</div>
+                    <a href="#appointments" class="menu-item" data-section="appointments">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>All Appointments</span>
+                        <span class="badge">12</span>
+                    </a>
+                    <a href="#pending" class="menu-item" data-section="pending">
+                        <i class="fas fa-clock"></i>
+                        <span>Pending</span>
+                        <span class="badge">5</span>
+                    </a>
+                    <a href="#confirmed" class="menu-item" data-section="confirmed">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Confirmed</span>
+                    </a>
+                    <a href="#completed" class="menu-item" data-section="completed">
+                        <i class="fas fa-history"></i>
+                        <span>Completed</span>
+                    </a>
+                </div>
+                
+                <!-- Users & Communication -->
+                <div class="menu-section">
+                    <div class="menu-section-title">Communication</div>
+                    <a href="#messages" class="menu-item" data-section="messages">
+                        <i class="fas fa-envelope"></i>
+                        <span>Messages</span>
+                        <span class="badge">3</span>
+                    </a>
+                    <a href="#subscribers" class="menu-item" data-section="subscribers">
+                        <i class="fas fa-users"></i>
+                        <span>Newsletter</span>
+                    </a>
+                    <a href="#contacts" class="menu-item" data-section="contacts">
+                        <i class="fas fa-address-book"></i>
+                        <span>Contacts</span>
+                    </a>
+                </div>
+                
+                <!-- Settings -->
+                <div class="menu-section">
+                    <div class="menu-section-title">Settings</div>
+                    <a href="#site-settings" class="menu-item" data-section="site-settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Site Settings</span>
+                    </a>
+                    <a href="#users" class="menu-item" data-section="users">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="#backup" class="menu-item" data-section="backup">
+                        <i class="fas fa-database"></i>
+                        <span>Backup</span>
+                    </a>
+                    <a href="#logs" class="menu-item" data-section="logs">
+                        <i class="fas fa-history"></i>
+                        <span>Activity Logs</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h4 class="page-title" id="pageTitle">Dashboard</h4>
+                </div>
+                
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search anything..." id="globalSearch">
+                    </div>
+                    
+                    <div class="header-notifications" id="notificationsBtn">
+                        <i class="far fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    
+                    <div class="user-profile" id="userProfileBtn">
+                        <div class="user-avatar">JD</div>
+                        <div class="user-info">
+                            <div class="user-name">John Doe</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dashboard Content -->
+            <div class="dashboard-content" id="dashboardContent">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>156</h3>
+                            <p>Total Appointments</p>
+                        </div>
+                        <div class="stat-icon primary">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>24</h3>
+                            <p>New Clients</p>
+                        </div>
+                        <div class="stat-icon success">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>89%</h3>
+                            <p>Satisfaction Rate</p>
+                        </div>
+                        <div class="stat-icon warning">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>12</h3>
+                            <p>Pending Reviews</p>
+                        </div>
+                        <div class="stat-icon danger">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="quick-action-btn" onclick="openModal('newAppointmentModal')">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>New Appointment</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="openModal('newBlogModal')">
+                        <i class="fas fa-pen"></i>
+                        <span>Write Blog Post</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="openModal('newEventModal')">
+                        <i class="fas fa-calendar-day"></i>
+                        <span>Create Event</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="openModal('newCounselorModal')">
+                        <i class="fas fa-user-md"></i>
+                        <span>Add Counselor</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="openModal('sendNewsletterModal')">
+                        <i class="fas fa-mail-bulk"></i>
+                        <span>Send Newsletter</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="generateReport()">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Generate Report</span>
+                    </button>
+                </div>
+                
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h5>Appointment Trends</h5>
+                            <div class="chart-actions">
+                                <select id="trendPeriod">
+                                    <option value="week">This Week</option>
+                                    <option value="month" selected>This Month</option>
+                                    <option value="year">This Year</option>
+                                </select>
+                            </div>
+                        </div>
+                        <canvas id="appointmentChart" style="height: 300px;"></canvas>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h5>Service Distribution</h5>
+                        </div>
+                        <canvas id="serviceChart" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Analytics Section -->
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-value">1,234</div>
+                        <div class="analytics-label">Website Visitors</div>
+                        <div class="analytics-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+12.5%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-value">856</div>
+                        <div class="analytics-label">Blog Views</div>
+                        <div class="analytics-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8.3%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-value">45</div>
+                        <div class="analytics-label">New Leads</div>
+                        <div class="analytics-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+23%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-value">89%</div>
+                        <div class="analytics-label">Retention Rate</div>
+                        <div class="analytics-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+5.2%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Appointments Table -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h5>Recent Appointments</h5>
+                        <button class="btn-add" onclick="openModal('newAppointmentModal')">
+                            <i class="fas fa-plus"></i>
+                            New Appointment
+                        </button>
+                    </div>
+                    
+                    <table class="data-table" id="appointmentsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Client</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Counselor</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#AP001</td>
+                                <td>Sarah Johnson</td>
+                                <td>2024-01-15</td>
+                                <td>10:00 AM</td>
+                                <td>Individual</td>
+                                <td>Dr. Smith</td>
+                                <td><span class="status-badge confirmed">Confirmed</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" onclick="viewAppointment('AP001')"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon edit" onclick="editAppointment('AP001')"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon delete" onclick="deleteItem('appointment', 'AP001')"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#AP002</td>
+                                <td>Michael Chen</td>
+                                <td>2024-01-15</td>
+                                <td>2:00 PM</td>
+                                <td>Therapy</td>
+                                <td>Dr. Williams</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" onclick="viewAppointment('AP002')"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon edit" onclick="editAppointment('AP002')"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon delete" onclick="deleteItem('appointment', 'AP002')"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#AP003</td>
+                                <td>Emily Davis</td>
+                                <td>2024-01-16</td>
+                                <td>11:30 AM</td>
+                                <td>Group</td>
+                                <td>Dr. Brown</td>
+                                <td><span class="status-badge confirmed">Confirmed</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" onclick="viewAppointment('AP003')"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon edit" onclick="editAppointment('AP003')"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon delete" onclick="deleteItem('appointment', 'AP003')"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Recent Blog Posts -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h5>Recent Blog Posts</h5>
+                        <button class="btn-add" onclick="openModal('newBlogModal')">
+                            <i class="fas fa-plus"></i>
+                            New Post
+                        </button>
+                    </div>
+                    
+                    <table class="data-table" id="blogTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Published</th>
+                                <th>Views</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Managing Anxiety in Daily Life</td>
+                                <td>Dr. Smith</td>
+                                <td>Anxiety</td>
+                                <td>2024-01-14</td>
+                                <td>1,234</td>
+                                <td><span class="status-badge confirmed">Published</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" onclick="viewPost(1)"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon edit" onclick="editPost(1)"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon delete" onclick="deleteItem('post', 1)"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>The Power of Group Therapy</td>
+                                <td>Dr. Williams</td>
+                                <td>Therapy</td>
+                                <td>2024-01-13</td>
+                                <td>856</td>
+                                <td><span class="status-badge confirmed">Published</span></td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon view" onclick="viewPost(2)"><i class="fas fa-eye"></i></button>
+                                        <button class="btn-icon edit" onclick="editPost(2)"><i class="fas fa-edit"></i></button>
+                                        <button class="btn-icon delete" onclick="deleteItem('post', 2)"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Appointment Modal -->
+    <div class="modal fade" id="newAppointmentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Schedule New Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="appointmentForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Client Name *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone *</label>
+                                <input type="tel" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Appointment Type *</label>
+                                <select class="form-select" required>
+                                    <option value="">Select type</option>
+                                    <option value="individual">Individual Counseling</option>
+                                    <option value="group">Group Therapy</option>
+                                    <option value="workshop">Workshop</option>
+                                    <option value="consultation">Initial Consultation</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Date *</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Time *</label>
+                                <input type="time" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Session Mode *</label>
+                                <select class="form-select" required>
+                                    <option value="in_person">In-Person</option>
+                                    <option value="online_video">Online Video</option>
+                                    <option value="online_voice">Online Voice</option>
+                                    <option value="phone">Phone Call</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Counselor</label>
+                                <select class="form-select">
+                                    <option value="">Assign counselor</option>
+                                    <option value="1">Dr. Smith</option>
+                                    <option value="2">Dr. Williams</option>
+                                    <option value="3">Dr. Brown</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Concerns / Notes</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveAppointment()">
+                        <i class="fas fa-save me-2"></i>Schedule Appointment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Blog Post Modal -->
+    <div class="modal fade" id="newBlogModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="blogForm">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label">Title *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Category *</label>
+                                <select class="form-select" required>
+                                    <option value="anxiety">Anxiety & Stress</option>
+                                    <option value="depression">Depression & Mood</option>
+                                    <option value="relationships">Relationships</option>
+                                    <option value="self_care">Self-Care & Wellness</option>
+                                    <option value="trauma">Trauma & Recovery</option>
+                                    <option value="youth">Youth & Teen Support</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Slug *</label>
+                            <input type="text" class="form-control" required>
+                            <small class="text-muted">URL-friendly version of the title</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Excerpt *</label>
+                            <textarea class="form-control" rows="2" required></textarea>
+                            <small class="text-muted">Brief summary for blog listings (max 500 characters)</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Content *</label>
+                            <div id="quillEditor" style="height: 300px;"></div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Featured Image</label>
+                                <input type="file" class="form-control" accept="image/*">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tags</label>
+                                <select class="form-select select2-multiple" multiple>
+                                    <option value="anxiety">Anxiety</option>
+                                    <option value="stress">Stress</option>
+                                    <option value="therapy">Therapy</option>
+                                    <option value="wellness">Wellness</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="featuredPost">
+                                    <label class="form-check-label" for="featuredPost">Mark as Featured</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="publishPost" checked>
+                                    <label class="form-check-label" for="publishPost">Publish Immediately</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Save as Draft</button>
+                    <button type="button" class="btn btn-primary" onclick="saveBlogPost()">
+                        <i class="fas fa-publish me-2"></i>Publish Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Counselor Modal -->
+    <div class="modal fade" id="newCounselorModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Counselor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="counselorForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Title *</label>
+                                <input type="text" class="form-control" required>
+                                <small class="text-muted">e.g., Licensed Professional Counselor</small>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Experience (Years)</label>
+                                <input type="number" class="form-control" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Specialties *</label>
+                            <input type="text" class="form-control" required>
+                            <small class="text-muted">Comma-separated list (e.g., Anxiety, Depression, Trauma)</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Languages Spoken</label>
+                            <input type="text" class="form-control" value="English">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Bio *</label>
+                            <textarea class="form-control" rows="5" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Profile Photo</label>
+                            <input type="file" class="form-control" accept="image/*">
+                        </div>
+                        
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="activeCounselor" checked>
+                            <label class="form-check-label" for="activeCounselor">Active (visible on website)</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCounselor()">
+                        <i class="fas fa-user-plus me-2"></i>Add Counselor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Site Settings Modal -->
+    <div class="modal fade" id="siteSettingsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Site Settings</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs mb-3" id="settingsTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#general">General</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#contact">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#social">Social Media</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#seo">SEO</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="general">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Site Name</label>
+                                    <input type="text" class="form-control" value="Suzstar Counseling">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tagline</label>
+                                    <input type="text" class="form-control" value="Mental Health Hub">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Logo</label>
+                                    <input type="file" class="form-control" accept="image/*">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Favicon</label>
+                                    <input type="file" class="form-control" accept="image/*">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Primary Color</label>
+                                        <input type="color" class="form-control form-control-color" value="#4A90E2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Secondary Color</label>
+                                        <input type="color" class="form-control form-control-color" value="#F5A623">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="tab-pane" id="contact">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" value="0799240254">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">WhatsApp</label>
+                                    <input type="text" class="form-control" value="0799240254">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" value="Suzstarcounselingservices@gmail.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" rows="2">Mombasa, Kenya</textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Mon-Fri</label>
+                                        <input type="text" class="form-control" value="8am - 5pm">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Saturday</label>
+                                        <input type="text" class="form-control" value="8am - 12pm">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Sunday</label>
+                                        <input type="text" class="form-control" value="Closed / By appointment">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="tab-pane" id="social">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Facebook URL</label>
+                                    <input type="url" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Twitter URL</label>
+                                    <input type="url" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Instagram URL</label>
+                                    <input type="url" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">LinkedIn URL</label>
+                                    <input type="url" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">YouTube URL</label>
+                                    <input type="url" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="tab-pane" id="seo">
+                            <form>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Description</label>
+                                    <textarea class="form-control" rows="3">Compassionate, accessible, and stigma-free mental health support in Mombasa.</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meta Keywords</label>
+                                    <input type="text" class="form-control" value="counseling, therapy, mental health, Mombasa">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Google Analytics ID</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save me-2"></i>Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    
+    <script>
+        // Initialize Quill editor
+        var quill = new Quill('#quillEditor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'header': 1 }, { 'header': 2 }],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'indent': '-1'}, { 'indent': '+1' }],
+                    [{ 'direction': 'rtl' }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    ['clean'],
+                    ['link', 'image', 'video']
+                ]
+            }
+        });
+
+        // Initialize DataTables
+        $(document).ready(function() {
+            $('#appointmentsTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                order: [[2, 'desc']]
+            });
+            
+            $('#blogTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                order: [[3, 'desc']]
+            });
+            
+            // Initialize Select2
+            $('.select2-multiple').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#newBlogModal')
+            });
+        });
+
+        // Initialize Chart.js
+        const ctx1 = document.getElementById('appointmentChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Appointments',
+                    data: [12, 19, 15, 24],
+                    borderColor: '#4A90E2',
+                    backgroundColor: 'rgba(74,144,226,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        const ctx2 = document.getElementById('serviceChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Individual', 'Group', 'Workshops', 'Consultation'],
+                datasets: [{
+                    data: [45, 25, 20, 10],
+                    backgroundColor: [
+                        '#4A90E2',
+                        '#F5A623',
+                        '#28A745',
+                        '#DC3545'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Sidebar Toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('show');
+        });
+
+        // Menu Item Click Handler
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Update page title
+                document.getElementById('pageTitle').textContent = this.querySelector('span').textContent;
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 992) {
+                    document.getElementById('sidebar').classList.remove('show');
+                }
+                
+                // Show toast notification
+                toastr.info('Loading section...');
+                
+                // Simulate content loading
+                showLoading();
+                setTimeout(hideLoading, 1000);
+            });
+        });
+
+        // Submenu Toggle
+        document.querySelectorAll('.menu-item[data-bs-toggle="collapse"]').forEach(item => {
+            item.addEventListener('click', function() {
+                const target = document.querySelector(this.getAttribute('href'));
+                target.classList.toggle('show');
+            });
+        });
+
+        // Global Search
+        document.getElementById('globalSearch').addEventListener('input', function(e) {
+            const query = e.target.value;
+            if (query.length > 2) {
+                // Simulate search
+                toastr.info(`Searching for "${query}"...`);
+            }
+        });
+
+        // Notifications
+        document.getElementById('notificationsBtn').addEventListener('click', function() {
+            toastr.info('You have 3 unread notifications');
+        });
+
+        // User Profile
+        document.getElementById('userProfileBtn').addEventListener('click', function() {
+            // Toggle user menu (simplified)
+            toastr.info('User profile clicked');
+        });
+
+        // Calendar Initialization
+        var calendarEl = document.getElementById('calendar');
+        if (calendarEl) {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: [
+                    {
+                        title: 'Sarah Johnson - Individual',
+                        start: '2024-01-15T10:00:00',
+                        backgroundColor: '#4A90E2'
+                    },
+                    {
+                        title: 'Group Therapy Session',
+                        start: '2024-01-16T14:00:00',
+                        end: '2024-01-16T16:00:00',
+                        backgroundColor: '#F5A623'
+                    },
+                    {
+                        title: 'Michael Chen - Consultation',
+                        start: '2024-01-17T11:00:00',
+                        backgroundColor: '#28A745'
+                    }
+                ],
+                eventClick: function(info) {
+                    toastr.info(`Event: ${info.event.title}`);
+                }
+            });
+            calendar.render();
+        }
+
+        // Utility Functions
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function openModal(modalId) {
+            const modal = new bootstrap.Modal(document.getElementById(modalId));
+            modal.show();
+        }
+
+        function closeModal(modalId) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+            if (modal) {
+                modal.hide();
+            }
+        }
+
+        function saveAppointment() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                closeModal('newAppointmentModal');
+                toastr.success('Appointment scheduled successfully!');
+            }, 1500);
+        }
+
+        function saveBlogPost() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                closeModal('newBlogModal');
+                toastr.success('Blog post published successfully!');
+            }, 2000);
+        }
+
+        function saveCounselor() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                closeModal('newCounselorModal');
+                toastr.success('Counselor added successfully!');
+            }, 1500);
+        }
+
+        function saveSettings() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                closeModal('siteSettingsModal');
+                toastr.success('Settings saved successfully!');
+            }, 1500);
+        }
+
+        function viewAppointment(id) {
+            toastr.info(`Viewing appointment: ${id}`);
+        }
+
+        function editAppointment(id) {
+            toastr.info(`Editing appointment: ${id}`);
+        }
+
+        function deleteItem(type, id) {
+            if (confirm(`Are you sure you want to delete this ${type}?`)) {
+                showLoading();
+                setTimeout(() => {
+                    hideLoading();
+                    toastr.success(`${type} deleted successfully!`);
+                }, 1000);
+            }
+        }
+
+        function viewPost(id) {
+            toastr.info(`Viewing post: ${id}`);
+        }
+
+        function editPost(id) {
+            toastr.info(`Editing post: ${id}`);
+        }
+
+        function generateReport() {
+            showLoading();
+            setTimeout(() => {
+                hideLoading();
+                toastr.success('Report generated and downloaded!');
+            }, 2000);
+        }
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + N for new appointment
+            if (e.ctrlKey && e.key === 'n') {
+                e.preventDefault();
+                openModal('newAppointmentModal');
+            }
+            
+            // Ctrl + B for new blog post
+            if (e.ctrlKey && e.key === 'b') {
+                e.preventDefault();
+                openModal('newBlogModal');
+            }
+            
+            // Ctrl + S for save (when modal is open)
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                toastr.info('Save shortcut triggered');
+            }
+            
+            // Escape key handling
+            if (e.key === 'Escape') {
+                // Close any open modals
+                const openModals = document.querySelectorAll('.modal.show');
+                openModals.forEach(modal => {
+                    bootstrap.Modal.getInstance(modal).hide();
+                });
+            }
+        });
+
+        // Auto-save functionality
+        let autoSaveTimer;
+        function autoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                // Simulate auto-save
+                console.log('Auto-saving...');
+            }, 30000); // Auto-save every 30 seconds
+        }
+
+        // Track user activity for auto-save
+        document.addEventListener('keyup', autoSave);
+        document.addEventListener('click', autoSave);
+
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Toastr configuration
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: 'toast-top-right',
+            timeOut: 3000
+        };
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 992) {
+                document.getElementById('sidebar').classList.remove('show');
+            }
+        });
+
+        // Prevent accidental navigation
+        window.addEventListener('beforeunload', function(e) {
+            // Check if there are unsaved changes
+            const hasUnsavedChanges = false; // Implement based on your needs
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        console.log('Dashboard initialized successfully!');
+    </script>
+</body>
+</html>

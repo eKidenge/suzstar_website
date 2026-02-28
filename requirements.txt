@@ -1,7 +1,5 @@
 Django>=5.2,<6.0
 django-ckeditor
 gunicorn==21.2.0
-#Pillow
-gunicorn
 whitenoise
 psycopg2-binary

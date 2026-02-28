@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-b-_ym)+s7*j=$n!i#&9)qnjxt0*+kj_qd)e)lf74-ii$9d#3q#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "suzstar-website.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
